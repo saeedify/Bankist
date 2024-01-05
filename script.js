@@ -139,3 +139,35 @@ function calcDispSummary(movements) {
 }
 
 calcDispSummary(account1.movements);
+
+//LOGIN FUNCTIONALITY
+btnLogin.addEventListener('click', function (e) {
+  // console.log('click occurred');
+
+  e.preventDefault(); //STOPS PAGE FROM RELOADING
+  inputLoginPin.blur(); //REMOVE FOCUS FROM ACTIVE INPUT-PIN ELEMENT
+  let enteredUsername = inputLoginUsername.value;
+  let enteredPin = Number(inputLoginPin.value);
+
+  // console.log(
+  //   `entered username: ${enteredUsername} \r entered pin: ${enteredPin}`
+  // );
+
+  let acc = accounts.find(function (currAcc) {
+    return currAcc.username === enteredUsername;
+  });
+
+  if (enteredPin === acc?.pin) {
+    // console.log('Login success!');
+
+    //WELCOME TEXT
+    labelWelcome.textContent = `Welcome Back, ${acc.owner.split(' ')[0]}`;
+    //DISPLAY MOVEMENTS
+    displayMov(acc.movements);
+    //DISPLAY BALANCE
+    calcDispBalance(acc.movements);
+    //DISPLAY SUMMARY
+    calcDispSummary(acc.movements);
+    containerApp.style.opacity = 100;
+  }
+});
