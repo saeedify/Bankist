@@ -115,21 +115,21 @@ function calcDispBalance(movements) {
   labelBalance.textContent = balance + ' €';
 }
 
-calcDispBalance(account1.movements);
+// calcDispBalance(account1.movements);
 
 //CALCULATE AND DISPLAY SUMMARY
-function calcDispSummary(movements) {
-  const sumDeposits = movements
+function calcDispSummary(acc) {
+  const sumDeposits = acc.movements
     .filter((mov) => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
 
-  const sumWithdrawals = movements
+  const sumWithdrawals = acc.movements
     .filter((mov) => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
 
-  const sumInterest = movements
+  const sumInterest = acc.movements
     .filter((mov) => mov > 0)
-    .map((deposit) => (deposit * 1.2) / 100)
+    .map((deposit) => (deposit * acc.interestRate) / 100)
     .filter((interest) => interest > 1)
     .reduce((acc, interest) => acc + interest, 0);
 
@@ -138,7 +138,7 @@ function calcDispSummary(movements) {
   labelSumInterest.textContent = sumInterest + '€';
 }
 
-calcDispSummary(account1.movements);
+// calcDispSummary(account1.movements);
 
 //LOGIN FUNCTIONALITY
 btnLogin.addEventListener('click', function (e) {
@@ -160,6 +160,8 @@ btnLogin.addEventListener('click', function (e) {
   if (enteredPin === acc?.pin) {
     // console.log('Login success!');
 
+    //CLEAR INPUT FIELDS
+    inputLoginUsername.value = inputLoginPin.value = '';
     //WELCOME TEXT
     labelWelcome.textContent = `Welcome Back, ${acc.owner.split(' ')[0]}`;
     //DISPLAY MOVEMENTS
@@ -167,7 +169,8 @@ btnLogin.addEventListener('click', function (e) {
     //DISPLAY BALANCE
     calcDispBalance(acc.movements);
     //DISPLAY SUMMARY
-    calcDispSummary(acc.movements);
+    calcDispSummary(acc);
+
     containerApp.style.opacity = 100;
   }
 });
