@@ -90,8 +90,9 @@ accounts.forEach(function (account) {
   createUsername(account);
 });
 
+//UI UPDATE
 function updateUI(acc) {
-  //DISPLAY MOVEMENTS
+  //display movements
   function displayMov(movements) {
     containerMovements.innerHTML = '';
     movements.forEach(function (mov, i) {
@@ -106,7 +107,7 @@ function updateUI(acc) {
     });
   }
 
-  //CALCULATE AND DISPLAY BALANCE
+  //calculate and display balance
   function calcDispBalance(acc) {
     acc.balance = acc.movements.reduce(function (acc, mov) {
       return acc + mov;
@@ -114,7 +115,7 @@ function updateUI(acc) {
     labelBalance.textContent = acc.balance + ' €';
   }
 
-  //CALCULATE AND DISPLAY SUMMARY
+  //calculate and display summary
   function calcDispSummary(acc) {
     const sumDeposits = acc.movements
       .filter((mov) => mov > 0)
@@ -192,5 +193,25 @@ btnTransfer.addEventListener('click', function (e) {
     accLoggedIn.movements.push(-1 * transferAmount);
 
     updateUI(accLoggedIn);
+  }
+});
+
+//CLOSE ACCOUNT
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  if (
+    inputCloseUsername.value === accLoggedIn.username &&
+    Number(inputClosePin.value) === accLoggedIn.pin
+  ) {
+    const index = accounts.findIndex(function (currAcc) {
+      return currAcc.username === inputCloseUsername.value;
+    });
+
+    accounts.splice(index, 1);
+
+    inputCloseUsername.value = inputClosePin.value = '';
+
+    containerApp.style.opacity = 0;
   }
 });
